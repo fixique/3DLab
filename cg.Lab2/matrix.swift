@@ -18,19 +18,19 @@ extension String {
     subscript(range: CountableRange<Int>) -> String {
         let startIndex = self.index(self.startIndex, offsetBy: range.lowerBound)
         let endIndex = self.index(startIndex, offsetBy: range.count)
-        return self[startIndex..<endIndex]
+        return String(self[startIndex..<endIndex])
     }
     
     subscript(range: CountableClosedRange<Int>) -> String {
         let startIndex = self.index(self.startIndex, offsetBy: range.lowerBound)
         let endIndex = self.index(startIndex, offsetBy: range.count)
-        return self[startIndex...endIndex]
+        return String(self[startIndex...endIndex])
     }
     
     subscript(range: NSRange) -> String {
         let startIndex = self.index(self.startIndex, offsetBy: range.location)
         let endIndex = self.index(startIndex, offsetBy: range.length)
-        return self[startIndex..<endIndex]
+        return String(self[startIndex..<endIndex])
     }
 }
 
@@ -595,8 +595,8 @@ func *(left: Double, right:Matrix) -> Matrix {
 
 func *(left: Matrix, right: Matrix) -> Matrix {
     
-    var lcp = left.copy()
-    var rcp = right.copy();
+    var lcp = left.copy(with: nil)
+    var rcp = right.copy(with: nil);
     
     if (lcp.rows == 1 && rcp.rows == 1) && (lcp.columns == rcp.columns) { // exception for single row matrices (inspired by numpy)
         rcp = rcp^
