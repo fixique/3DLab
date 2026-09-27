@@ -1,0 +1,31 @@
+id: T003
+title: Replace storyboard layout with adaptive programmatic UI
+status: done
+
+goal: >
+  Replace the current storyboard-based screen layout with a programmatic,
+  adaptive UIKit layout that works correctly on current iPad screen sizes
+  while preserving the existing 3D rendering and button-driven interactions.
+
+acceptance:
+  - The application no longer depends on Main.storyboard for its main screen layout
+  - The main screen UI is constructed programmatically with UIKit
+  - The rendered 3D "M" remains visually centered in the usable screen area
+  - All existing interaction buttons remain available and functional
+  - All controls fit within the visible screen bounds without clipping
+  - The layout adapts to different iPad sizes and orientations
+  - Existing rendering and transformation behavior remains unchanged
+  - The project builds successfully with Xcode 26.6
+  - The application installs and launches successfully on an iPad simulator
+  - No unrelated architecture or rendering refactoring is introduced
+
+constraints:
+  - Keep UIKit
+  - Do not migrate to SwiftUI
+  - Do not change the matrix or rendering algorithms unless required for layout integration
+  - Preserve the existing button actions and behavior
+  - Prefer Auto Layout or UIKit layout primitives over hard-coded absolute frames
+
+result:
+  review: approved
+  commit: 8211f5a
