@@ -20,12 +20,18 @@ import UIKit
 */
 class ViewController: UIViewController {
 
-    @IBOutlet weak var imageView: UIImageView!
-    let zeroCordX: Double = 512
-    let zeroCordY: Double = 345
+    let imageView = UIImageView()
     let u: Double = 1.0
     var typeProjection = 5
     var typePerspective: Double = 512
+
+    private let buttonHeight: CGFloat = 44
+    private let buttonFontSize: CGFloat = 13
+
+    private var didConvertToHomogeneous = false
+    private var didComputeContentOffset = false
+    private var contentOffset: CGPoint = .zero
+    private var renderedSize: CGSize = .zero
     /*
     var vertex = Matrix([0,0,0,
                          0,100,-100,
@@ -143,11 +149,16 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        buildInterface()
+
         print("\(vertex)")
         
-        vertex = convertCoord(points: vertex)
+        if !didConvertToHomogeneous {
+            vertex = convertCoord(points: vertex)
+            didConvertToHomogeneous = true
+        }
         print("\(vertex)")
-        drawFigure(points: vertex.ProjectOrt(type: typeProjection, D: typePerspective), relations: relations)
+        redraw()
 
     
     }
@@ -324,10 +335,22 @@ class ViewController: UIViewController {
     
     func drawFigure(points: Matrix, relations: Matrix) {
         
+        let viewport = imageView.bounds.size
+        guard viewport.width > 0, viewport.height > 0 else { return }
+        renderedSize = viewport
+
         let decPoints = convertToDec(points: points)
         print("\(decPoints)")
         
-        UIGraphicsBeginImageContextWithOptions(CGSize(width: 1024, height: 691), false, 0)
+        if !didComputeContentOffset {
+            contentOffset = centeredContentOffset(for: decPoints)
+            didComputeContentOffset = true
+        }
+
+        let zeroCordX = viewport.width / 2 + contentOffset.x
+        let zeroCordY = viewport.height / 2 + contentOffset.y
+
+        UIGraphicsBeginImageContextWithOptions(viewport, false, 0)
         
         let context = UIGraphicsGetCurrentContext()!
         context.setLineWidth(3.0)
@@ -350,6 +373,35 @@ class ViewController: UIViewController {
         UIGraphicsEndImageContext() // Заканчиваем функцию отрисовки
         
         imageView.image = img
+    }
+
+    private func redraw() {
+        drawFigure(points: vertex.ProjectOrt(type: typeProjection, D: typePerspective), relations: relations)
+    }
+
+    private func redrawIfNeeded() {
+        let viewport = imageView.bounds.size
+        guard viewport.width > 0, viewport.height > 0, viewport != renderedSize else { return }
+        redraw()
+    }
+
+    private func centeredContentOffset(for points: Matrix) -> CGPoint {
+
+        guard points.rows > 0 else { return .zero }
+
+        var minX = Double.greatestFiniteMagnitude
+        var maxX = -Double.greatestFiniteMagnitude
+        var minY = Double.greatestFiniteMagnitude
+        var maxY = -Double.greatestFiniteMagnitude
+
+        for i in 0..<points.rows {
+            minX = Swift.min(minX, points[i,0])
+            maxX = Swift.max(maxX, points[i,0])
+            minY = Swift.min(minY, points[i,1])
+            maxY = Swift.max(maxY, points[i,1])
+        }
+
+        return CGPoint(x: -((minX + maxX) / 2), y: (minY + maxY) / 2)
     }
 
     func convertCoord(points: Matrix) -> Matrix {
@@ -384,5 +436,140 @@ class ViewController: UIViewController {
     }
 
 
+    // MARK: - Programmatic interface
+
+    private func buildInterface() {
+
+        view.backgroundColor = .white
+
+        let rootStack = makeStack(axis: .vertical, spacing: 8, distribution: .fill)
+        rootStack.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(rootStack)
+
+        let drawingArea = FigureView()
+        drawingArea.onLayout = { [weak self] in
+            self?.redrawIfNeeded()
+        }
+        drawingArea.setContentHuggingPriority(UILayoutPriority(1), for: .vertical)
+        drawingArea.setContentCompressionResistancePriority(UILayoutPriority(1), for: .vertical)
+        drawingArea.addSubview(imageView)
+
+        imageView.contentMode = .scaleToFill
+        imageView.isUserInteractionEnabled = false
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.setContentHuggingPriority(UILayoutPriority(1), for: .horizontal)
+        imageView.setContentHuggingPriority(UILayoutPriority(1), for: .vertical)
+        imageView.setContentCompressionResistancePriority(UILayoutPriority(1), for: .horizontal)
+        imageView.setContentCompressionResistancePriority(UILayoutPriority(1), for: .vertical)
+
+        let controlsStack = makeStack(axis: .vertical, spacing: 8, distribution: .fill)
+        controlsStack.setContentHuggingPriority(.required, for: .vertical)
+        controlsStack.setContentCompressionResistancePriority(.required, for: .vertical)
+
+        let translationRow = makeStack(axis: .horizontal, spacing: 6)
+        for (title, action) in [
+            ("Вверх", #selector(transferUp(_:))),
+            ("Вниз", #selector(transferDown(_:))),
+            ("Вправо", #selector(transferRight(_:))),
+            ("Влево", #selector(transferLeft(_:))),
+            ("Вперед", #selector(transferForward(_:))),
+            ("Назад", #selector(transferBack(_:)))
+            ] {
+            translationRow.addArrangedSubview(makeButton(title: title, action: action))
+        }
+
+        let operationsRow = makeStack(axis: .horizontal, spacing: 6)
+        operationsRow.addArrangedSubview(makeButtonGroup([
+            ("Отражение xOz", #selector(reflectXOZ(_:))),
+            ("Отражение yOz", #selector(reflectYOZ(_:))),
+            ("Отражение xOy", #selector(reflectXOY(_:))),
+            ("Отраж. от грани", #selector(reflectBySide(_:)))
+            ]))
+        operationsRow.addArrangedSubview(makeButtonGroup([
+            ("Приближение X", #selector(xScale(_:))),
+            ("Отдаление Х", #selector(xScaleMin(_:))),
+            ("Приближение Y", #selector(yScale(_:))),
+            ("Отдаление Y", #selector(yScaleMin(_:))),
+            ("Приближение XY", #selector(xyScale(_:))),
+            ("Отдаление XY", #selector(xyScaleMin(_:)))
+            ]))
+        operationsRow.addArrangedSubview(makeButtonGroup([
+            ("Ox по часовой", #selector(oxRotationBack(_:))),
+            ("Ox против", #selector(oxRotationForward(_:))),
+            ("Oy по часовой", #selector(oyRotationBack(_:))),
+            ("Oy против", #selector(oyRotationForward(_:))),
+            ("Oz по часовой", #selector(ozRotationForward(_:))),
+            ("Oz против", #selector(ozRotationBack(_:)))
+            ]))
+        operationsRow.addArrangedSubview(makeButtonGroup([
+            ("YZ", #selector(yzProjection(_:))),
+            ("XZ", #selector(xzProjection(_:))),
+            ("XY", #selector(xyProjection(_:))),
+            ("П. YZ", #selector(pYZ(_:))),
+            ("П. XZ", #selector(pXZ(_:))),
+            ("П. XY", #selector(pXY(_:)))
+            ]))
+
+        controlsStack.addArrangedSubview(translationRow)
+        controlsStack.addArrangedSubview(operationsRow)
+        rootStack.addArrangedSubview(drawingArea)
+        rootStack.addArrangedSubview(controlsStack)
+
+        let guide = view.safeAreaLayoutGuide
+        NSLayoutConstraint.activate([
+            rootStack.topAnchor.constraint(equalTo: guide.topAnchor),
+            rootStack.bottomAnchor.constraint(equalTo: guide.bottomAnchor),
+            rootStack.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
+            rootStack.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
+
+            imageView.topAnchor.constraint(equalTo: drawingArea.topAnchor),
+            imageView.bottomAnchor.constraint(equalTo: drawingArea.bottomAnchor),
+            imageView.leadingAnchor.constraint(equalTo: drawingArea.leadingAnchor),
+            imageView.trailingAnchor.constraint(equalTo: drawingArea.trailingAnchor)
+            ])
+    }
+
+    private func makeStack(axis: NSLayoutConstraint.Axis, spacing: CGFloat, distribution: UIStackView.Distribution = .fillEqually) -> UIStackView {
+        let stack = UIStackView()
+        stack.axis = axis
+        stack.spacing = spacing
+        stack.alignment = .fill
+        stack.distribution = distribution
+        return stack
+    }
+
+    private func makeButtonGroup(_ items: [(String, Selector)]) -> UIStackView {
+        let group = makeStack(axis: .vertical, spacing: 6)
+        for (title, action) in items {
+            group.addArrangedSubview(makeButton(title: title, action: action))
+        }
+        return group
+    }
+
+    private func makeButton(title: String, action: Selector) -> UIButton {
+        let button = UIButton(type: .system)
+        button.setTitle(title, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: buttonFontSize)
+        button.titleLabel?.numberOfLines = 0
+        button.titleLabel?.lineBreakMode = .byWordWrapping
+        button.titleLabel?.textAlignment = .center
+        button.contentHorizontalAlignment = .center
+        button.heightAnchor.constraint(greaterThanOrEqualToConstant: buttonHeight).isActive = true
+        button.addTarget(self, action: action, for: .touchUpInside)
+        return button
+    }
+}
+
+
+// Контейнер рисунка, который сообщает о своей раскладке,
+// чтобы рисунок можно было перерисовать под фактический размер.
+private final class FigureView: UIView {
+
+    var onLayout: (() -> Void)?
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        onLayout?()
+    }
 }
 
