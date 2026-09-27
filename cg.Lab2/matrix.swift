@@ -189,21 +189,21 @@ class Matrix: NSObject  {
         switch typeO {
         case 0:
             if (typeS){
-                rotationMatrix = Matrix([1,0,0,0,0,cos(angle * M_PI / 180),-sin(angle * M_PI / 180),0,0,sin(angle * M_PI / 180),cos(angle * M_PI / 180),0,0,0,0,1], rows: 4, columns: 4)
+                rotationMatrix = Matrix([1,0,0,0,0,cos(angle * Double.pi / 180),-sin(angle * Double.pi / 180),0,0,sin(angle * Double.pi / 180),cos(angle * Double.pi / 180),0,0,0,0,1], rows: 4, columns: 4)
             } else {
-                rotationMatrix = Matrix([1,0,0,0,0,cos(angle * M_PI / 180),sin(angle * M_PI / 180),0,0,-sin(angle * M_PI / 180),cos(angle * M_PI / 180),0,0,0,0,1], rows: 4, columns: 4)
+                rotationMatrix = Matrix([1,0,0,0,0,cos(angle * Double.pi / 180),sin(angle * Double.pi / 180),0,0,-sin(angle * Double.pi / 180),cos(angle * Double.pi / 180),0,0,0,0,1], rows: 4, columns: 4)
             }
         case 1:
             if(typeS){
-                rotationMatrix = Matrix([cos(angle * M_PI / 180),0,sin(angle * M_PI / 180),0,0,1,0,0,-sin(angle * M_PI / 180),0,cos(angle * M_PI / 180),0,0,0,0,1], rows: 4, columns: 4)
+                rotationMatrix = Matrix([cos(angle * Double.pi / 180),0,sin(angle * Double.pi / 180),0,0,1,0,0,-sin(angle * Double.pi / 180),0,cos(angle * Double.pi / 180),0,0,0,0,1], rows: 4, columns: 4)
             } else {
-                rotationMatrix = Matrix([cos(angle * M_PI / 180),0,-sin(angle * M_PI / 180),0,0,1,0,0,sin(angle * M_PI / 180),0,cos(angle * M_PI / 180),0,0,0,0,1], rows: 4, columns: 4)
+                rotationMatrix = Matrix([cos(angle * Double.pi / 180),0,-sin(angle * Double.pi / 180),0,0,1,0,0,sin(angle * Double.pi / 180),0,cos(angle * Double.pi / 180),0,0,0,0,1], rows: 4, columns: 4)
             }
         case 2:
             if (typeS) {
-                rotationMatrix = Matrix([cos(angle * M_PI / 180),-sin(angle * M_PI / 180),0,0,sin(angle * M_PI / 180),cos(angle * M_PI / 180),0,0,0,0,1,0,0,0,0,1],rows: 4, columns: 4)
+                rotationMatrix = Matrix([cos(angle * Double.pi / 180),-sin(angle * Double.pi / 180),0,0,sin(angle * Double.pi / 180),cos(angle * Double.pi / 180),0,0,0,0,1,0,0,0,0,1],rows: 4, columns: 4)
             } else {
-                rotationMatrix = Matrix([cos(angle * M_PI / 180),sin(angle * M_PI / 180),0,0,-sin(angle * M_PI / 180),cos(angle * M_PI / 180),0,0,0,0,1,0,0,0,0,1],rows: 4, columns: 4)
+                rotationMatrix = Matrix([cos(angle * Double.pi / 180),sin(angle * Double.pi / 180),0,0,-sin(angle * Double.pi / 180),cos(angle * Double.pi / 180),0,0,0,0,1,0,0,0,0,1],rows: 4, columns: 4)
             }
         default:
             rotationMatrix = Matrix([1, 0, 0, 0, 1, 0, 0, 0, 1] ,rows: 3, columns: 3)
@@ -322,7 +322,7 @@ class Matrix: NSObject  {
     func rotate(angle: Double, rotationDirection: Bool) {
         
         if (rotationDirection) {
-            let rotationMatrix = Matrix([(cos(angle * M_PI / 180)),-sin(angle * M_PI / 180), 0, sin(angle * M_PI / 180) , cos(angle * M_PI / 180), 0, 0, 0, 1] ,rows: 3, columns: 3)
+            let rotationMatrix = Matrix([(cos(angle * Double.pi / 180)),-sin(angle * Double.pi / 180), 0, sin(angle * Double.pi / 180) , cos(angle * Double.pi / 180), 0, 0, 0, 1] ,rows: 3, columns: 3)
             let temp = Matrix(self.data, rows: self.rows, columns: self.columns)
             
             for i in 0..<self.rows {
@@ -335,7 +335,7 @@ class Matrix: NSObject  {
             self.data = temp.data
             
         } else {
-            let rotationMatrix = Matrix([(cos(angle * M_PI / 180)),sin(angle * M_PI / 180), 0, -sin(angle * M_PI / 180) , cos(angle * M_PI / 180), 0, 0, 0, 1] ,rows: 3, columns: 3)
+            let rotationMatrix = Matrix([(cos(angle * Double.pi / 180)),sin(angle * Double.pi / 180), 0, -sin(angle * Double.pi / 180) , cos(angle * Double.pi / 180), 0, 0, 0, 1] ,rows: 3, columns: 3)
             let temp = Matrix(self.data, rows: self.rows, columns: self.columns)
             
             for i in 0..<self.rows {
