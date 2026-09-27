@@ -49,6 +49,7 @@ Responsibilities:
 - Run relevant builds and tests.
 - Validate runtime behavior when required by the task.
 - Do not commit changes unless explicitly requested.
+- Do not modify task lifecycle state unless explicitly instructed by the orchestrator.
 
 If implementation reveals that the approved plan is incorrect or incomplete, stop and report the issue instead of silently expanding the task scope.
 
@@ -63,6 +64,7 @@ Responsibilities:
 - Run relevant builds, tests, or runtime checks when useful.
 - Report actionable findings ordered by severity.
 - Do not suggest optional cleanup, modernization, or refactoring unless required for correctness.
+- Do not modify task lifecycle state unless explicitly instructed by the orchestrator.
 
 If there are no actionable findings, return exactly:
 
@@ -88,6 +90,21 @@ review -> implementing
 
 The task state must reflect the actual workflow stage.
 
+## Task state ownership
+
+Task lifecycle state is owned by the orchestrator.
+
+Planner, Implementer, and Reviewer agents must not:
+
+- change the `status` field in `task.yaml`
+- move task directories between `active` and `done`
+- mark tasks as approved or completed
+- perform workflow state transitions
+
+unless explicitly instructed by the orchestrator.
+
+Agents should report their result and let the orchestrator update task state.
+
 ## Validation
 
 Validation should be derived from the task acceptance criteria.
@@ -101,6 +118,15 @@ Prefer concrete evidence such as:
 - absence of relevant warnings or errors
 
 Do not treat reasoning alone as validation when the repository provides a way to verify the behavior.
+
+Validation must be proportionate to the task risk and acceptance criteria.
+
+Do not perform exhaustive benchmarking, disassembly, large custom harnesses, deep equivalence analysis, or other expensive exploratory validation unless:
+
+- the task explicitly requires it, or
+- normal validation reveals evidence of a correctness problem.
+
+Prefer the smallest set of checks that provides sufficient confidence that the acceptance criteria are satisfied.
 
 ## Scope discipline
 
