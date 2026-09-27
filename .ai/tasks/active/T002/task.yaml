@@ -1,0 +1,13 @@
+id: T002
+title: Remove M_PI deprecation warnings
+status: planned
+
+goal: >
+  Remove the M_PI deprecation warnings produced by Xcode 26.6
+  without changing application behavior.
+
+acceptance:
+  - The project builds successfully with Xcode 26.6
+  - M_PI deprecation warnings are no longer produced
+  - Application behavior is unchanged
+  - No unrelated refactoring or modernization is introduced

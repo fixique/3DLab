@@ -1,0 +1,37 @@
+version: 1
+
+roles:
+  planner:
+    agent_profile: codex
+    model: gpt-5.6-sol
+    write_access: false
+
+  implementer:
+    agent_profile: local-qwen
+    write_access: true
+
+  reviewer:
+    agent_profile: codex
+    model: gpt-5.6-sol
+    write_access: false
+
+states:
+  - planned
+  - implementing
+  - review
+  - approved
+  - done
+
+transitions:
+  planned:
+    - implementing
+
+  implementing:
+    - review
+
+  review:
+    - implementing
+    - approved
+
+  approved:
+    - done
