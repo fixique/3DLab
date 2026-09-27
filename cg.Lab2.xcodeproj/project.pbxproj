@@ -12,6 +12,8 @@
 		4D2ABA381DFECE5D0036DF51 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4D2ABA371DFECE5D0036DF51 /* Assets.xcassets */; };
 		4D2ABA3B1DFECE5D0036DF51 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4D2ABA391DFECE5D0036DF51 /* LaunchScreen.storyboard */; };
 		4D2ABA431DFECF190036DF51 /* matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D2ABA421DFECF190036DF51 /* matrix.swift */; };
+		9A0000000000000000000004 /* MatrixTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0000000000000000000003 /* MatrixTests.swift */; };
+		9A0000000000000000000005 /* matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D2ABA421DFECF190036DF51 /* matrix.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,10 +24,19 @@
 		4D2ABA3A1DFECE5D0036DF51 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4D2ABA3C1DFECE5D0036DF51 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4D2ABA421DFECF190036DF51 /* matrix.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = matrix.swift; sourceTree = "<group>"; };
+		9A0000000000000000000002 /* cg.Lab2Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = cg.Lab2Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9A0000000000000000000003 /* MatrixTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		4D2ABA2A1DFECE5D0036DF51 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9A0000000000000000000007 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -39,6 +50,7 @@
 			isa = PBXGroup;
 			children = (
 				4D2ABA2F1DFECE5D0036DF51 /* cg.Lab2 */,
+				9A0000000000000000000009 /* cg.Lab2Tests */,
 				4D2ABA2E1DFECE5D0036DF51 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -47,6 +59,7 @@
 			isa = PBXGroup;
 			children = (
 				4D2ABA2D1DFECE5D0036DF51 /* cg.Lab2.app */,
+				9A0000000000000000000002 /* cg.Lab2Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -62,6 +75,14 @@
 				4D2ABA3C1DFECE5D0036DF51 /* Info.plist */,
 			);
 			path = cg.Lab2;
+			sourceTree = "<group>";
+		};
+		9A0000000000000000000009 /* cg.Lab2Tests */ = {
+			isa = PBXGroup;
+			children = (
+				9A0000000000000000000003 /* MatrixTests.swift */,
+			);
+			path = cg.Lab2Tests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -84,6 +105,23 @@
 			productReference = 4D2ABA2D1DFECE5D0036DF51 /* cg.Lab2.app */;
 			productType = "com.apple.product-type.application";
 		};
+		9A0000000000000000000001 /* cg.Lab2Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9A000000000000000000000C /* Build configuration list for PBXNativeTarget "cg.Lab2Tests" */;
+			buildPhases = (
+				9A0000000000000000000006 /* Sources */,
+				9A0000000000000000000007 /* Frameworks */,
+				9A0000000000000000000008 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = cg.Lab2Tests;
+			productName = cg.Lab2Tests;
+			productReference = 9A0000000000000000000002 /* cg.Lab2Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -94,11 +132,16 @@
 				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = fixique;
 				TargetAttributes = {
-					4D2ABA2C1DFECE5D0036DF51 = {
-						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = AD4XVSB9X2;
-						ProvisioningStyle = Automatic;
-					};
+				4D2ABA2C1DFECE5D0036DF51 = {
+					CreatedOnToolsVersion = 8.0;
+					DevelopmentTeam = AD4XVSB9X2;
+					ProvisioningStyle = Automatic;
+				};
+				9A0000000000000000000001 = {
+					CreatedOnToolsVersion = 8.0;
+					DevelopmentTeam = AD4XVSB9X2;
+					ProvisioningStyle = Automatic;
+				};
 				};
 			};
 			buildConfigurationList = 4D2ABA281DFECE5C0036DF51 /* Build configuration list for PBXProject "cg.Lab2" */;
@@ -115,6 +158,7 @@
 			projectRoot = "";
 			targets = (
 				4D2ABA2C1DFECE5D0036DF51 /* cg.Lab2 */,
+				9A0000000000000000000001 /* cg.Lab2Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -129,6 +173,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9A0000000000000000000008 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -139,6 +190,15 @@
 				4D2ABA431DFECF190036DF51 /* matrix.swift in Sources */,
 				4D2ABA331DFECE5D0036DF51 /* ViewController.swift in Sources */,
 				4D2ABA311DFECE5D0036DF51 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9A0000000000000000000006 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9A0000000000000000000004 /* MatrixTests.swift in Sources */,
+				9A0000000000000000000005 /* matrix.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -275,6 +335,34 @@
 			};
 			name = Release;
 		};
+		9A000000000000000000000A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = AD4XVSB9X2;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "cg.Lab2Tests";
+				PRODUCT_BUNDLE_IDENTIFIER = "me.fixique.cg-Lab2.Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		9A000000000000000000000B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = AD4XVSB9X2;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "cg.Lab2Tests";
+				PRODUCT_BUNDLE_IDENTIFIER = "me.fixique.cg-Lab2.Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -294,6 +382,15 @@
 				4D2ABA411DFECE5D0036DF51 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+		};
+		9A000000000000000000000C /* Build configuration list for PBXNativeTarget "cg.Lab2Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9A000000000000000000000A /* Debug */,
+				9A000000000000000000000B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
